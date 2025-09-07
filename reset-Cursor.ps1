@@ -1177,71 +1177,11 @@ Write-Host @"
     ╚═════╝ ╚═════╝ ╚═╝  ╚═╝╚══════╝ ╚═════╝ ╚═╝  ╚═╝
 
 "@
-Write-Host "$BLUE================================$NC"
-Write-Host "$GREEN🚀   Cursor 防掉试用Pro删除工具          $NC"
-Write-Host "$YELLOW📱  关注公众号【煎饼果子卷AI】 $NC"
-Write-Host "$YELLOW🤝  一起交流更多Cursor技巧和AI知识(脚本免费、关注公众号加群有更多技巧和大佬)  $NC"
-Write-Host "$YELLOW💡  [重要提示] 本工具免费，如果对您有帮助，请关注公众号【煎饼果子卷AI】  $NC"
-Write-Host ""
-Write-Host "$YELLOW💰   [小小广告]  出售CursorPro教育号一年质保三个月，有需要找我(86)，WeChat：JavaRookie666  $NC"
-Write-Host "$BLUE================================$NC"
 
-# 🎯 用户选择菜单
-Write-Host ""
-Write-Host "$GREEN🎯 [选择模式]$NC 请选择您要执行的操作："
-Write-Host ""
-Write-Host "$BLUE  1️⃣  仅修改机器码$NC"
-Write-Host "$YELLOW      • 执行机器码修改功能$NC"
-Write-Host "$YELLOW      • 执行注入破解JS代码到核心文件$NC"
-Write-Host "$YELLOW      • 跳过文件夹删除/环境重置步骤$NC"
-Write-Host "$YELLOW      • 保留现有Cursor配置和数据$NC"
-Write-Host ""
-Write-Host "$BLUE  2️⃣  重置环境+修改机器码$NC"
-Write-Host "$RED      • 执行完全环境重置（删除Cursor文件夹）$NC"
-Write-Host "$RED      • ⚠️  配置将丢失，请注意备份$NC"
-Write-Host "$YELLOW      • 按照机器代码修改$NC"
-Write-Host "$YELLOW      • 执行注入破解JS代码到核心文件$NC"
-Write-Host "$YELLOW      • 这相当于当前的完整脚本行为$NC"
-Write-Host ""
-
-# 获取用户选择
-do {
-    $userChoice = "2"
-    if ($userChoice -eq "1") {
-        Write-Host "$GREEN✅ [选择]$NC 您选择了：仅修改机器码"
-        $executeMode = "MODIFY_ONLY"
-        break
-    } elseif ($userChoice -eq "2") {
-        Write-Host "$GREEN✅ [选择]$NC 您选择了：重置环境+修改机器码"
-        Write-Host "$RED⚠️  [重要警告]$NC 此操作将删除所有Cursor配置文件！"
-        $confirmReset = "yes"
-        if ($confirmReset -eq "yes") {
-            $executeMode = "RESET_AND_MODIFY"
-            break
-        } else {
-            Write-Host "$YELLOW👋 [取消]$NC 用户取消重置操作"
-            continue
-        }
-    } else {
-        Write-Host "$RED❌ [错误]$NC 无效选择，请输入 1 或 2"
-    }
-} while ($true)
 
 Write-Host ""
 
 # 📋 根据选择显示执行流程说明
-if ($executeMode -eq "MODIFY_ONLY") {
-    Write-Host "$GREEN📋 [执行流程]$NC 仅修改机器码模式将按以下步骤执行："
-    Write-Host "$BLUE  1️⃣  检测Cursor配置文件$NC"
-    Write-Host "$BLUE  2️⃣  备份现有配置文件$NC"
-    Write-Host "$BLUE  3️⃣  修改机器码配置$NC"
-    Write-Host "$BLUE  4️⃣  显示操作完成信息$NC"
-    Write-Host ""
-    Write-Host "$YELLOW⚠️  [注意事项]$NC"
-    Write-Host "$YELLOW  • 不会删除任何文件夹或重置环境$NC"
-    Write-Host "$YELLOW  • 保留所有现有配置和数据$NC"
-    Write-Host "$YELLOW  • 原配置文件会自动备份$NC"
-} else {
     Write-Host "$GREEN📋 [执行流程]$NC 重置环境+修改机器码模式将按以下步骤执行："
     Write-Host "$BLUE  1️⃣  检测并关闭Cursor进程$NC"
     Write-Host "$BLUE  2️⃣  保存Cursor程序路径信息$NC"
@@ -1262,19 +1202,8 @@ if ($executeMode -eq "MODIFY_ONLY") {
     Write-Host "$YELLOW  • 建议在执行前关闭所有Cursor窗口$NC"
     Write-Host "$YELLOW  • 执行完成后需要重新启动Cursor$NC"
     Write-Host "$YELLOW  • 原配置文件会自动备份到backups文件夹$NC"
-}
 Write-Host ""
 
-# 🤔 用户确认
-Write-Host "$GREEN🤔 [确认]$NC 请确认您已了解上述执行流程"
-$confirmation = "y"
-if ($confirmation -notmatch "^(y|yes)$") {
-    Write-Host "$YELLOW👋 [退出]$NC 用户取消执行，脚本退出"
-    Read-Host "按回车键退出"
-    exit 0
-}
-Write-Host "$GREEN✅ [确认]$NC 用户确认继续执行"
-Write-Host ""
 
 # 获取并显示 Cursor 版本
 function Get-CursorVersion {
@@ -1424,117 +1353,7 @@ if (-not (Test-Path $BACKUP_DIR)) {
 }
 
 # �🚀 根据用户选择执行相应功能
-if ($executeMode -eq "MODIFY_ONLY") {
-    Write-Host "$GREEN🚀 [开始]$NC 开始执行仅修改机器码功能..."
 
-    # 先进行环境检查
-    $envCheck = Test-CursorEnvironment -Mode "MODIFY_ONLY"
-    if (-not $envCheck.Success) {
-        Write-Host ""
-        Write-Host "$RED❌ [环境检查失败]$NC 无法继续执行，发现以下问题："
-        foreach ($issue in $envCheck.Issues) {
-            Write-Host "$RED  • ${issue}$NC"
-        }
-        Write-Host ""
-        Write-Host "$YELLOW💡 [建议]$NC 请选择以下操作："
-        Write-Host "$BLUE  1️⃣  选择'重置环境+修改机器码'选项（推荐）$NC"
-        Write-Host "$BLUE  2️⃣  手动启动Cursor一次，然后重新运行脚本$NC"
-        Write-Host "$BLUE  3️⃣  检查Cursor是否正确安装$NC"
-        Write-Host ""
-        Read-Host "按回车键退出"
-        exit 1
-    }
-
-    # 执行机器码修改
-    $configSuccess = Modify-MachineCodeConfig -Mode "MODIFY_ONLY"
-
-    if ($configSuccess) {
-        Write-Host ""
-        Write-Host "$GREEN🎉 [配置文件]$NC 机器码配置文件修改完成！"
-
-        # 添加注册表修改
-        Write-Host "$BLUE🔧 [注册表]$NC 正在修改系统注册表..."
-        $registrySuccess = Update-MachineGuid
-
-        # 🔧 新增：JavaScript注入功能（设备识别绕过增强）
-        Write-Host ""
-        Write-Host "$BLUE🔧 [设备识别绕过]$NC 正在执行JavaScript注入功能..."
-        Write-Host "$BLUE💡 [说明]$NC 此功能将直接修改Cursor内核JS文件，实现更深层的设备识别绕过"
-        $jsSuccess = Modify-CursorJSFiles
-
-        if ($registrySuccess) {
-            Write-Host "$GREEN✅ [注册表]$NC 系统注册表修改成功"
-
-            if ($jsSuccess) {
-                Write-Host "$GREEN✅ [JavaScript注入]$NC JavaScript注入功能执行成功"
-                Write-Host ""
-                Write-Host "$GREEN🎉 [完成]$NC 所有机器码修改完成（增强版）！"
-                Write-Host "$BLUE📋 [详情]$NC 已完成以下修改："
-                Write-Host "$GREEN  ✓ Cursor 配置文件 (storage.json)$NC"
-                Write-Host "$GREEN  ✓ 系统注册表 (MachineGuid)$NC"
-                Write-Host "$GREEN  ✓ JavaScript内核注入（设备识别绕过）$NC"
-            } else {
-                Write-Host "$YELLOW⚠️  [JavaScript注入]$NC JavaScript注入功能执行失败，但其他功能成功"
-                Write-Host ""
-                Write-Host "$GREEN🎉 [完成]$NC 所有机器码修改完成！"
-                Write-Host "$BLUE📋 [详情]$NC 已完成以下修改："
-                Write-Host "$GREEN  ✓ Cursor 配置文件 (storage.json)$NC"
-                Write-Host "$GREEN  ✓ 系统注册表 (MachineGuid)$NC"
-                Write-Host "$YELLOW  ⚠ JavaScript内核注入（部分失败）$NC"
-            }
-
-            # 🔒 添加配置文件保护机制
-            Write-Host "$BLUE🔒 [保护]$NC 正在设置配置文件保护..."
-            try {
-                $configPath = "$env:APPDATA\Cursor\User\globalStorage\storage.json"
-                $configFile = Get-Item $configPath
-                $configFile.IsReadOnly = $true
-                Write-Host "$GREEN✅ [保护]$NC 配置文件已设置为只读，防止Cursor覆盖修改"
-                Write-Host "$BLUE💡 [提示]$NC 文件路径: $configPath"
-            } catch {
-                Write-Host "$YELLOW⚠️  [保护]$NC 设置只读属性失败: $($_.Exception.Message)"
-                Write-Host "$BLUE💡 [建议]$NC 可手动右键文件 → 属性 → 勾选'只读'"
-            }
-        } else {
-            Write-Host "$YELLOW⚠️  [注册表]$NC 注册表修改失败，但配置文件修改成功"
-
-            if ($jsSuccess) {
-                Write-Host "$GREEN✅ [JavaScript注入]$NC JavaScript注入功能执行成功"
-                Write-Host ""
-                Write-Host "$YELLOW🎉 [部分完成]$NC 配置文件和JavaScript注入完成，注册表修改失败"
-                Write-Host "$BLUE💡 [建议]$NC 可能需要管理员权限来修改注册表"
-                Write-Host "$BLUE📋 [详情]$NC 已完成以下修改："
-                Write-Host "$GREEN  ✓ Cursor 配置文件 (storage.json)$NC"
-                Write-Host "$YELLOW  ⚠ 系统注册表 (MachineGuid) - 失败$NC"
-                Write-Host "$GREEN  ✓ JavaScript内核注入（设备识别绕过）$NC"
-            } else {
-                Write-Host "$YELLOW⚠️  [JavaScript注入]$NC JavaScript注入功能执行失败"
-                Write-Host ""
-                Write-Host "$YELLOW🎉 [部分完成]$NC 配置文件修改完成，注册表和JavaScript注入失败"
-                Write-Host "$BLUE💡 [建议]$NC 可能需要管理员权限来修改注册表"
-            }
-
-            # 🔒 即使注册表修改失败，也要保护配置文件
-            Write-Host "$BLUE🔒 [保护]$NC 正在设置配置文件保护..."
-            try {
-                $configPath = "$env:APPDATA\Cursor\User\globalStorage\storage.json"
-                $configFile = Get-Item $configPath
-                $configFile.IsReadOnly = $true
-                Write-Host "$GREEN✅ [保护]$NC 配置文件已设置为只读，防止Cursor覆盖修改"
-                Write-Host "$BLUE💡 [提示]$NC 文件路径: $configPath"
-            } catch {
-                Write-Host "$YELLOW⚠️  [保护]$NC 设置只读属性失败: $($_.Exception.Message)"
-                Write-Host "$BLUE💡 [建议]$NC 可手动右键文件 → 属性 → 勾选'只读'"
-            }
-        }
-
-        Write-Host "$BLUE💡 [提示]$NC 现在可以启动Cursor使用新的机器码配置"
-    } else {
-        Write-Host ""
-        Write-Host "$RED❌ [失败]$NC 机器码修改失败！"
-        Write-Host "$YELLOW💡 [建议]$NC 请尝试'重置环境+修改机器码'选项"
-    }
-} else {
     # 完整的重置环境+修改机器码流程
     Write-Host "$GREEN🚀 [开始]$NC 开始执行重置环境+修改机器码功能..."
 
@@ -1659,7 +1478,6 @@ if ($executeMode -eq "MODIFY_ONLY") {
 
 # 🎉 脚本执行完成
 Write-Host "$GREEN🎉 [脚本完成]$NC 感谢使用 Cursor 机器码修改工具！"
-Write-Host "$BLUE💡 [提示]$NC 如有问题请参考公众号或重新运行脚本"
 Write-Host ""
 Read-Host "按回车键退出"
 exit 0
