@@ -1214,7 +1214,7 @@ do {
     } elseif ($userChoice -eq "2") {
         Write-Host "$GREEN✅ [选择]$NC 您选择了：重置环境+修改机器码"
         Write-Host "$RED⚠️  [重要警告]$NC 此操作将删除所有Cursor配置文件！"
-        $confirmReset = "yes" "确认执行完全重置？(输入 yes 确认，其他任意键取消)"
+        $confirmReset = "yes"
         if ($confirmReset -eq "yes") {
             $executeMode = "RESET_AND_MODIFY"
             break
