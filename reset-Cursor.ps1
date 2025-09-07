@@ -1472,7 +1472,6 @@ if (-not (Test-Path $BACKUP_DIR)) {
         Write-Host "$RED❌ [失败]$NC 机器码配置修改失败！"
         Write-Host "$YELLOW💡 [建议]$NC 请检查错误信息并重试"
     }
-}
 
 
 
